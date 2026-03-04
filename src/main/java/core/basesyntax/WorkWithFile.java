@@ -44,15 +44,19 @@ public class WorkWithFile {
             throw new RuntimeException("Can't read from file " + fromFileName, e);
 
         }
-        createReport(toFileName, supply, buy);
+        List<String> report = createReport(supply, buy);
+        writeToFile(report, toFileName);
     }
 
-    private void createReport(String toFileName, int supply, int buy) {
-        List<String> report = Arrays.asList(
+    private List<String> createReport(int supply, int buy) {
+        return Arrays.asList(
                 SUPPLY + "," + supply,
                 BUY + "," + buy,
                 RESULT + "," + (supply - buy)
         );
+    }
+
+    private void writeToFile(List<String> report, String toFileName) {
         try {
             Files.write(Paths.get(toFileName), report);
         } catch (IOException e) {
