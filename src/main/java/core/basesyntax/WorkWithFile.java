@@ -1,8 +1,6 @@
 package core.basesyntax;
 
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -15,12 +13,10 @@ public class WorkWithFile {
     private static final String RESULT = "result";
 
     public void getStatistic(String fromFileName, String toFileName) {
-
         int supply = 0;
         int buy = 0;
 
-        File file = new File(fromFileName);
-        try (BufferedReader br = new BufferedReader(new FileReader(file))) {
+        try (BufferedReader br = Files.newBufferedReader(Paths.get(fromFileName))) {
             String line;
             while ((line = br.readLine()) != null) {
                 if (line.trim().isEmpty()) {
@@ -45,10 +41,13 @@ public class WorkWithFile {
                 }
             }
         } catch (IOException e) {
-            throw new RuntimeException("Can`t read from file " + fromFileName, e);
+            throw new RuntimeException("Can't read from file " + fromFileName, e);
 
         }
+        createReport(toFileName, supply, buy);
+    }
 
+    private void createReport(String toFileName, int supply, int buy) {
         List<String> report = Arrays.asList(
                 SUPPLY + "," + supply,
                 BUY + "," + buy,
